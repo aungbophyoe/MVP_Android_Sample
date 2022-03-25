@@ -1,23 +1,15 @@
 package com.aungbophyoe.space.mvpandroidsample.mvp.model
 
+import android.util.Log
+import com.aungbophyoe.space.mvpandroidsample.mvp.presenter.UserPresenter
 import com.aungbophyoe.space.mvpandroidsample.network.ApiService
 import com.aungbophyoe.space.mvpandroidsample.utils.AppConstants
+import kotlinx.coroutines.*
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class UserModel private constructor(){
+class UserModel{
     var api: ApiService
-    companion object{
-        private var instance: UserModel? = null
-            get() {
-                if (instance == null) {
-                    instance = UserModel()
-                }
-                return instance
-            }
-            private set
-    }
-
     init {
         val retrofit = Retrofit.Builder()
             .baseUrl(AppConstants.BASE_URL)
@@ -26,5 +18,18 @@ class UserModel private constructor(){
         api = retrofit.create(ApiService::class.java)
     }
 
-    val data : Unit get(){}
+    fun getData(userPresenter: UserPresenter){
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = api.getUsers()
+                if(response.isSuccessful){
+                    userPresenter.displayUserToView(response?.body())
+                }else{
+                    userPresenter.displayErrorToView("${response.message()}")
+                }
+            }catch (e:Exception){
+                userPresenter.displayErrorToView("${e.message}")
+            }
+        }
+    }
 }
