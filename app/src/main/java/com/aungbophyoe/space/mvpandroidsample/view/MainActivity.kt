@@ -3,6 +3,8 @@ package com.aungbophyoe.space.mvpandroidsample.view
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -23,6 +25,10 @@ class MainActivity : AppCompatActivity(),UserView {
         findViewById(R.id.rvUser)
     }
 
+    private val progressBar : ProgressBar by lazy {
+        findViewById(R.id.progressBar)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -30,15 +36,20 @@ class MainActivity : AppCompatActivity(),UserView {
         recyclerView.adapter = userRecyclerAdapter
         userPresenter = UserPresenterImpl(this)
         userPresenter?.loadData()
+        progressBar.visibility = View.VISIBLE
     }
 
     override fun displayView(users: List<User>?) {
         Log.d("msg","success ${users?.size}")
         userRecyclerAdapter.submitList(users)
         recyclerView.adapter?.notifyDataSetChanged()
+        progressBar.visibility = View.GONE
+        recyclerView.visibility = View.VISIBLE
     }
 
     override fun displayError(msg: String?) {
         Log.d("msg","error")
+        progressBar.visibility = View.GONE
+        recyclerView.visibility = View.GONE
     }
 }
