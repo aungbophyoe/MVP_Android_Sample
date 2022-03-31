@@ -19,13 +19,31 @@ class UserModel{
     }
 
     fun getData(userPresenter: UserPresenter){
-        CoroutineScope(Dispatchers.IO).launch {
+        /*GlobalScope.launch {
             try {
                 val response = api.getUsers()
                 if(response.isSuccessful){
-                    userPresenter.displayUserToView(response?.body())
+                    withContext(Dispatchers.Main){
+                        userPresenter.displayUserToView(response?.body())
+                    }
                 }else{
-                    userPresenter.displayErrorToView("${response.message()}")
+                    withContext(Dispatchers.Main){
+                        userPresenter.displayErrorToView("${response.message()}")
+                    }
+                }
+            }catch (e:Exception){
+                userPresenter.displayErrorToView("${e.message}")
+            }
+        }*/
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = api.getUsers()
+                withContext(Dispatchers.Main){
+                    if(response.isSuccessful){
+                        userPresenter.displayUserToView(response?.body())
+                    }else{
+                        userPresenter.displayErrorToView("${response.message()}")
+                    }
                 }
             }catch (e:Exception){
                 userPresenter.displayErrorToView("${e.message}")

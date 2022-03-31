@@ -14,6 +14,9 @@ import com.aungbophyoe.space.mvpandroidsample.model.User
 import com.aungbophyoe.space.mvpandroidsample.mvp.presenter.UserPresenter
 import com.aungbophyoe.space.mvpandroidsample.mvp.presenter.UserPresenterImpl
 import com.aungbophyoe.space.mvpandroidsample.mvp.view.UserView
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class MainActivity : AppCompatActivity(),UserView {
@@ -48,7 +51,7 @@ class MainActivity : AppCompatActivity(),UserView {
     }
 
     override fun displayError(msg: String?) {
-        Log.d("msg","error")
+        Log.d("msg","$msg")
         progressBar.visibility = View.GONE
         recyclerView.visibility = View.GONE
     }
