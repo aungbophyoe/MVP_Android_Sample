@@ -39,6 +39,7 @@ class MainActivity : AppCompatActivity(),UserView {
         recyclerView.adapter = userRecyclerAdapter
         userPresenter = UserPresenterImpl(this)
         userPresenter?.loadData()
+        Log.d("msg","Load data")
         progressBar.visibility = View.VISIBLE
     }
 
